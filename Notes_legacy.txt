@@ -1,0 +1,99 @@
+* first started the virtual environment inside SocialNetwork_attempt2 (Refer Banas's django on how to)
+* Activated the virtual environment from inside scripts
+* come back up and start django project on venv1
+* created app socialnetwork inside website.
+   python manage.py startapp socialnetwork
+* Registered it in installed apps inside settings.py
+* Changed database to mysql
+	pip install pymysql
+	in settings.py of your project
+
+	DATABASES = {
+	    'default': {
+	        'ENGINE': 'django.db.backends.mysql',        
+	        'NAME': 'socialnetwork',
+	        'HOST':'127.0.0.1',
+	        'PORT':'3306',
+	        'USER': 'root',
+	        'PASSWORD': 'sonja',
+	    }
+	}
+	In _init_.py
+
+	import pymysql
+	pymysql.version_info = (1, 3, 13, "final", 0)
+	pymysql.install_as_MySQLdb()
+
+	The middle line is required because pymysql has an old version of mysqlclient which might throw an error
+* Ran npx create-react-app scclient inside venv1, to create the react client server
+* Ran npm run build   inside scclient that created a build directory (bundled static files)
+
+*Inside settings.py of website (our project, not the app), add the react folder build path to 'DIRS'
+ 
+		 TEMPLATES = [
+		    {
+		        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+		        'DIRS': [
+		               'D:\\Onedrive\\Work_12aug2018FromDesktopPC\\DjangoProjects\\SocialNetwork_attempt2\\venv1\\scclient\\build',
+		        ],
+		        'APP_DIRS': True,
+		        'OPTIONS': {
+		            'context_processors': [
+		                'django.template.context_processors.debug',
+		                'django.template.context_processors.request',
+		                'django.contrib.auth.context_processors.auth',
+		                'django.contrib.messages.context_processors.messages',
+		            ],
+		        },
+		    },
+		]
+
+	And at the bottom
+
+	STATICFILES_DIRS=[
+ 						'D:\\Onedrive\\Work_12aug2018FromDesktopPC\\DjangoProjects\\SocialNetwork_attempt2\\venv1\\scclient\\build\\static',
+					 ]
+	Now whenever we make a change to our react app, we need to do npm run build
+
+	Copy the bootstrap and font links (optional) inside public/index.html inside the react app
+	pip install django-cors-headers (THis is needed since in react we will be accessing localhost:8000 from localhost:3000)
+	make changes in settings.py as per (INSTALLED APPS AND MIDDLEWARE)
+	  https://pypi.org/project/django-cors-headers/
+	Then whitelist port 3000 
+		CORS_ORIGIN_WHITELIST = [    
+	    "http://localhost:3000",
+		]
+
+	
+
+* From now on, is Dennis Ivy's TODO app
+* Start the app
+  python manage.py startapp tasks
+* Added 'tasks', inside INSTALLED_APPS in settings.py
+* Created templates/tasks/list.html inside tasks app
+* Created a new model for tasks
+			#########################################################
+			   class Task(models.Model):
+				title=models.CharField(max_length=200)
+				complete=models.BooleanField(default=False)
+				created=models.DateTimeField(auto_now_add=True)
+
+				def __str__(self):
+					return self.title
+* Python manage.py makemigrations (Prep Migrations)
+* Python manage.py migrate        (Actually Migrate)
+* register models at tasks/admin.py
+
+
+* Dennis Ivy's TODO vanilla is complete 
+* Now we do with restAPI
+* python manage.py startapp todorest
+* Added 'todorest', inside INSTALLED_APPS in settings.py
+* Copied the models.py from the older Vanilla Project
+* Did, pip install djangorestframework
+* added 'rest_framework', inside installed_apps in settings.py
+* And then we implement the CRUD functionality 
+
+Now we create the front end
+* Python manage.py startapp frontend
+* Add 'frontend.apps.FrontendConfig', to INSTALLED_APPS in settings.py
