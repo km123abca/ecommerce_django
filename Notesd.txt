@@ -51,3 +51,20 @@
 [x] python manage.py makemigrations
     python manage.py migrate
 
+[x] Register your models at admin.py of store
+[x] create a superuser
+	python manage.py createsuperuser
+
+[x] Add media root for static files
+	MEDIA_ROOT=os.path.join(BASE_DIR,'static/images')
+
+[x] from django.conf.urls.static import static
+	from django.conf import settings
+	urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+
+	Now http://localhost:8000/images/23.jpg will takes us to the image
+	https://www.youtube.com/watch?v=33pnWTslX2E
+	
+ 
+
+   

@@ -49,6 +49,7 @@
 			<br/>
 			<div class="box-element hidden" id="payment-info">
 				<small>Paypal Options</small>
+				<button id="make-payment" class="btn btn-outline-dark">Make Payment</button>
 			</div>
 		</div>
 
@@ -58,16 +59,100 @@
 				<hr/>
 				<h3>Order Summary</h3>
 				<hr/>
-
+				{% for item in items %}
 				<div class="cart-row">
-					<div style="flex:2;"><img class="row-image" src="{% static 'images/woody.png' %}"/></div>
-					<div style="flex:2;">Oxytocin</div>
-					<div style="flex:1;">$34</div>					
-					<div style="flex:1;">x2</div>					
+					<div style="flex:2;"><img class="row-image" src="{{item.product.imageURL}}"/></div>
+					<div style="flex:2;">{{item.product.name}}</div>
+					<div style="flex:1;">${{item.product.price|floatformat:2}}</div>					
+					<div style="flex:1;">x{{item.quantity}}</div>					
 				</div>
-				<h5>Items:2</h5>
-				<h5>Total:$4</h5>
+				{% endfor %}
+				<h5>Items:{{order.get_cart_items}}</h5>
+				<h5>Total:${{order.get_cart_total|floatformat:2}}</h5>
 			</div>
 		</div>
 	</div>
+
+	<script>
+		let shipping="{{order.shipping}}";
+		let total='{{order.get_cart_total}}';
+		if(shipping=='False')
+			document.querySelector('#shipping-info').innerHTML='';
+
+		if(shipping=='False' && user!='AnonymousUser')
+			{
+				document.querySelector('#form-wrapper').classList.add('hidden');
+				document.querySelector('#payment-info').classList.remove('hidden');
+			}
+
+		var form=document.getElementById('form');
+		form.addEventListener('submit',
+								       function (e)
+								       {
+								       	e.preventDefault();
+								       	alert('form submitted');
+								       	document.getElementById('form-button').classList.add('hidden');
+								       	document.getElementById('payment-info').classList.remove('hidden');
+								       }
+			                 );
+		document.getElementById('make-payment').addEventListener('click',submitFormData);
+		function submitFormData()
+			{
+				// alert('payment button clicked');
+				let userFormData={
+									"name":null,
+									"email":null,
+									"total":total,
+				                 };
+				let shippingInfo={
+									"address":null,
+									"city":null,
+									"state":null,
+									"zipcode":null,
+				                 };
+				if(shipping!='False')
+					{
+					  shippingInfo.address= form.address.value;
+					  shippingInfo.city= form.city.value;
+					  shippingInfo.state= form.state.value;
+					  shippingInfo.zipcode= form.zipcode.value;
+					}
+				if(user=='AnonymousUser')
+					{
+					  userFormData.name= form.name.value;
+					  userFormData.email= form.email.value;
+					  
+					}
+				let url='/process_order/';
+				fetch(url,
+						  {
+						  	method:'POST',
+						  	headers:{
+						  			  'Content-Type':'application/json',
+						  			  'X-CSRFToken' :getCookie('csrftoken'),
+						  		    },
+						  	body:JSON.stringify(
+						  						 {
+						  						 	'form':userFormData,
+						  						 	'shipping':shippingInfo,
+						  						 }
+						  		               ),
+						  }
+					 )
+				.then(
+					 	response=>response.json()
+					 )
+			    .then(
+			    		(data)=>{
+			    				  console.log(data);
+			    				  alert('Transaction Completed');
+			    				  
+			    				  cart={};
+			    				  document.cookie='cart='+JSON.stringify(cart)+";domain=;path=/";
+
+			    				  window.location.href="{% url 'store' %}"
+			    		        }
+			         )
+			}
+	</script>
 {% endblock content %}
