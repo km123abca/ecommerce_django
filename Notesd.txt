@@ -63,7 +63,19 @@
 	urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 
 	Now http://localhost:8000/images/23.jpg will takes us to the image
-	https://www.youtube.com/watch?v=33pnWTslX2E
+	
+
+	paypal free sandbox accounts
+	https://developer.paypal.com/developer/accounts/
+
+	https://www.sandbox.paypal.com/myaccount/summary
+
+	First created a paypal dashboard account 
+	Inside the dashboard account created a business account (zoya@aol.com) and a personal account (kim@aol.com)
+	went to my apps and credentials . created a new app (django_ecommerce)
+	copied the client id and replaced sb in the script with it
+
+	<script src="https://www.paypal.com/sdk/js?client-id=Aep_oDYt7tElLQwLc9ZFOvknUJJfzwExaCm_AkPYbRCOb32J-i49cvYASacJQW_oNyO7nC6bD-3fv9C8&currency=USD&disable-funding=credit"></script>
 	
  
 
