@@ -1,4 +1,12 @@
+function showModal_k(titlemessage="no title",bodymessage="Dang it Kitchu.. Pull yourself together ")
+		{
+		 $('#mheader').html(titlemessage);
+		 $('#mmessage').html(bodymessage);
+		 $('#mm').modal();
+		}
+
 console.log('cart.js in operational in this page');
+// showModal_k("message","we are live bitches");
 let cart =JSON.parse(getCookie('cart'));
 // console.log('cart:'+cart)
 if(!cart)

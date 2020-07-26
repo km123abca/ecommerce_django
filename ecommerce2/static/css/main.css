@@ -105,3 +105,31 @@ h1,h2,h3,h4,h5,h6{
 	float:right;
 	margin: 5px;
 }
+
+
+.loginbox {
+  border: 2px solid black;
+  background: linear-gradient(
+    90deg,
+    #66e0ff 0%,
+    #b3ffb3 43%,
+    #e6ffff 100%
+  );
+  margin-top: 5%;
+  border-radius: 5%;
+    box-shadow:hsl(0, 0%, 80%) 0 0 16px;
+}
+
+.centext{
+	width:100%;
+	text-align: center;
+}
+.labtex{
+	width:100%;
+	border:1px solid black;
+}
+.logtit{
+	background-color: black;
+	color:white;
+	font-weight: bold;
+}
