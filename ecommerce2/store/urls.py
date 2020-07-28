@@ -12,6 +12,8 @@ urlpatterns = [
     path('process_order/',views.processOrder,name='process_order'),
     url(r'^login/$', views.LoginFormView.as_view(), name='login'),
     url(r'^register/$', views.UserFormView.as_view(), name='register'),
+    # path('product_preview/',views.product_preview,name='product_preview'),
+    url(r'^(?P<product_id>[0-9]+)/pp/$', views.product_preview,name='product_preview'),
     url(r'^logout/$', views.logout_user, name='logout_user'),
     # url(r'^(?!.*(images/))',views.noSuchPage,name='noPage'),
 ]

@@ -15,6 +15,8 @@ class Product(models.Model):
 	price=models.DecimalField(max_digits=7,decimal_places=2)
 	digital=models.BooleanField(default=False,null=True,blank=True)
 	image=models.ImageField(null=True,blank=True)
+	desc=models.CharField(max_length=3000,default='This product has no description')
+	rating=models.DecimalField(max_digits=2,decimal_places=1,default=1)
 
 	@property
 	def imageURL(self):

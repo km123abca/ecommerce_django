@@ -11,6 +11,7 @@ from django.shortcuts import redirect
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import View
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 
@@ -19,10 +20,12 @@ def store(request):
 	cartItems=data['cartItems']
 	order=data['order']
 	items=data['items']
+	userLoggedIn=True if request.user.is_authenticated else False
+
 
 
 	products=Product.objects.all()
-	context={'products':products,'cartItems':cartItems}
+	context={'products':products,'cartItems':cartItems,'userLoggedIn':userLoggedIn}
 	return render(request,'store/store.html',context)
 
 def cart(request):
@@ -30,9 +33,9 @@ def cart(request):
 	cartItems=data['cartItems']
 	order=data['order']
 	items=data['items']
+	userLoggedIn=True if request.user.is_authenticated else False
 
-
-	context={'items':items,'order':order,'cartItems':cartItems}
+	context={'items':items,'order':order,'cartItems':cartItems,'userLoggedIn':userLoggedIn}
 	return render(request,'store/cart.html',context)
 
 def checkout(request):
@@ -40,8 +43,9 @@ def checkout(request):
 	cartItems=data['cartItems']
 	order=data['order']
 	items=data['items']
+	userLoggedIn=True if request.user.is_authenticated else False
 
-	context={'items':items,'order':order,'cartItems':cartItems}
+	context={'items':items,'order':order,'cartItems':cartItems,'userLoggedIn':userLoggedIn}
 	return render(request,'store/checkout.html',context)
 
 def updateItem(request):
@@ -105,11 +109,15 @@ def noSuchPage(request):
 class LoginFormView(View):
     form_class=UserFormLogin
     template_name = 'store/register_login.html'
+    
+    
     def get(self, request):
+        data=cartData(request)
+        cartItems=data['cartItems']
         form = self.form_class(None)
         if request.session.has_key('askedfor'):
-            return render(request, self.template_name, {'form': form,'title':'Login','err':'You have to Login First'})    
-        return render(request, self.template_name, {'form': form,'title':'Login'})
+            return render(request, self.template_name, {'form': form,'title':'Login','err':'You have to Login First','cartItems':cartItems})    
+        return render(request, self.template_name, {'form': form,'title':'Login','cartItems':cartItems})
 
     def post(self,request):
         form=self.form_class(request.POST)        
@@ -135,7 +143,9 @@ class UserFormView(View):
 
     def get(self, request):
         form = self.form_class(None)
-        return render(request, self.template_name, {'form': form,'title':'Register'})
+        data=cartData(request)
+        cartItems=data['cartItems']
+        return render(request, self.template_name, {'form': form,'title':'Register','cartItems':cartItems})
 
     def post(self, request):
         form = self.form_class(request.POST)
@@ -163,3 +173,14 @@ class UserFormView(View):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+
+def product_preview(request,product_id):
+	print(product_id+' received')
+	# product=Product.objects.get(pk=product_id)
+	product =get_object_or_404(Product, pk=product_id)
+	data=cartData(request)
+	cartItems=data['cartItems']
+	userLoggedIn=True if request.user.is_authenticated else False
+	context={'cartItems':cartItems,'product':product,'userLoggedIn':userLoggedIn}
+	return render(request,'store/product_preview.html',context)
