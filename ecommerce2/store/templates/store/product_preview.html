@@ -17,9 +17,12 @@
     </div>
     <div class="row">
     	<h1 class="container-fluid">Rating:</h1>
-    	{{product.rating}}    	
+    	   
+    	{% for star in stars %}
+    	<img class="starimg" src="/images/starfull.png" />	
+    	{% endfor %}
     </div>
-    
+
 	</div>
 {% endblock content %}
 

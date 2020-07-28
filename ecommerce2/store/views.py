@@ -182,5 +182,9 @@ def product_preview(request,product_id):
 	data=cartData(request)
 	cartItems=data['cartItems']
 	userLoggedIn=True if request.user.is_authenticated else False
-	context={'cartItems':cartItems,'product':product,'userLoggedIn':userLoggedIn}
+
+	stars=[]
+	for i in range(int(product.rating)):
+		stars.append('s')
+	context={'cartItems':cartItems,'product':product,'stars':stars,'userLoggedIn':userLoggedIn}
 	return render(request,'store/product_preview.html',context)
